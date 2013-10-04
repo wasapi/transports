@@ -1,0 +1,4 @@
+transports.fcgi
+
+Permet d'afficher le temps d'attente pour les réseaux RATP et Transilien.
+L'affichage se fait à partir d'un butineur.
