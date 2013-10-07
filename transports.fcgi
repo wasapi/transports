@@ -2,7 +2,7 @@
 
 #
 # auteur: Yann Lambert
-# url:  https://github.com/wasapi/transports
+# url:    https://github.com/wasapi/transports
 #
 
 QUERY=`echo $QUERY_STRING | sed -e "s/=/='/g" -e "s/&/';/g" -e "s/+/ /g" -e "s/%0d%0a/<BR>/g" -e "s/$/'/" `
@@ -91,13 +91,29 @@ fonctionTRANSILIEN()
   echo "<br />"
 }
 
+fonctionTRAMWAY()
+{
+  IFS=$'\n'
+
+  url="http://www.ratp.fr/horaires/fr/ratp/tramway/prochains_passages/PP/T$1/$2/$3"
+  montramway=($(wget -qO - $url | grep -e "</td><td>" -e "Ligne T$1"))
+  echo "<table border="0">"
+  echo "<tr><td colspan=\"2\"><img src=\"http://www.ratp.fr/horaires/images/networks/tramway.png\"/> <img src=\"http://www.ratp.fr/horaires/images/lines/tramway/T$1.png\"/>"
+  echo ${montramway[0]} | sed 's/^.*<span>\(.*\)<\/span>.*$/<b>\1<\/b>\&nbsp;<\/td><\/tr>/'
+  i=1
+  while [ "$i" -lt "${#montramway[*]}" ]
+  do
+    echo "${montramway[$i]}" | sed -e 's/^.\{10\}\(.*\).\{5\}$/<tr><td>\1\&nbsp;<\/td><\/tr>/' -e 's/<\/td><td>/\&nbsp;<\/td><td>/'
+    ((i++))
+  done
+  echo "</table>"
+  echo "<br />"
+}
+
 echo "Content-type: text/html; charset=utf-8"
 echo ""
 
 case "$trajet" in
-  c)
-    fonctionTRANSILIEN CHELLES-GOURNAY
-    ;;
   sl)
     fonctionTRANSILIEN PARIS-SAINT-LAZARE-GARE-SAINT-LAZARE-8738400
     fonctionTRANSILIEN HAUSSMANN-SAINT-LAZARE-8728189
@@ -107,13 +123,13 @@ case "$trajet" in
     fonctionRER A Grande\ Arche\ la\ Defense R
     fonctionTRANSILIEN LA-DEFENSE-GRANDE-ARCHE-8738221
     ;;
-  pe)
-    fonctionTRANSILIEN PARIS-EST-GARE-DE-L-EST-8711300
+  pl)
+    fonctionTRAMWAY 3b Porte\ Des\ Lilas A
+    fonctionBUS 105 105_438 A
     ;;
   *)
-    echo "<a href=\"http://$HTTP_HOST$SCRIPT_NAME?trajet=c\">Transilien - Chelles</a><br />"
-    echo "<a href=\"http://$HTTP_HOST$SCRIPT_NAME?trajet=sl\">Transilien - SAINT-LAZARE</a><br />"
-    echo "<a href=\"http://$HTTP_HOST$SCRIPT_NAME?trajet=ld\">RER A / Transilien - La Defense</a><br />"
-    echo "<a href=\"http://$HTTP_HOST$SCRIPT_NAME?trajet=pe\">Transilien - Paris Est</a><br />"
+    echo "<a href=\"http://$HTTP_HOST$SCRIPT_NAME?trajet=sl\">Saint-Lazare</a><br />"
+    echo "<a href=\"http://$HTTP_HOST$SCRIPT_NAME?trajet=ld\">La Defense</a><br />"
+    echo "<a href=\"http://$HTTP_HOST$SCRIPT_NAME?trajet=pl\">Porte des Lilas</a><br />"
     ;;
 esac

@@ -3,29 +3,44 @@ transports.fcgi
 Permet d'afficher le temps d'attente pour les réseaux RATP et Transilien.
 L'affichage se fait à partir d'un butineur.
 
+Démo :
+  http://ichtux.net/transports.fcgi
+
+Dépendances :
+ - bash
+ - sed
+ - dos2unix
+ - Serveur web CGI
+
 Fonctions disponibles :
  - fonctionBUS
+ - fonctionTRAMWAY -> Fonctionne uniquement sur les tramway RATP
  - fonctionMETRO
  - fonctionRER
  - fonctionTRANSILIEN
 
 Paramètres :
 
-fonctionBUS
-  $1=ligne (ex : 295)
-  $2=arret (ex : 295_6312_6353) -> L'arret est à récupérer sur le site RATP
-  $3=sens  (ex : A ou R)
+  fonctionBUS
+    $1=ligne (ex : 295)
+    $2=arret (ex : 295_6312_6353) -> L'arret est à récupérer sur le site RATP
+    $3=sens  (ex : A ou R)
 
-fonctionMETRO
-  $1=ligne (ex : 4)
-  $2=arret (ex : Porte\ d\'Orleans)
-  $3=sens  (ex : A ou R)
+  fonctionTRAMWAY
+    $1=ligne (ex : 3b)
+    $2=arret (ex : Porte\ des\ Lilas)
+    $3=sens  (ex : A ou R)
 
-fonctionRER
-  $1=ligne (ex : A)
-  $2=arret (ex : Marne\ la\ Vallee-Chessy)
-  $3=sens  (ex : A ou R)
+  fonctionMETRO
+    $1=ligne (ex : 4)
+    $2=arret (ex : Porte\ d\'Orleans)
+    $3=sens  (ex : A ou R)
 
-fonctionTRANSILIEN
-  $1=gare        (ex : CSG) -> La gare est à récupérer sur le site de Transilien
-  $2=destination (ex : PE)  -> N'est plus fonctionnel
+  fonctionRER
+    $1=ligne (ex : A)
+    $2=arret (ex : Marne\ la\ Vallee-Chessy)
+    $3=sens  (ex : A ou R)
+
+  fonctionTRANSILIEN
+    $1=gare        (ex : CSG) -> La gare est à récupérer sur le site de Transilien
+    $2=destination (ex : PE)  -> N'est plus fonctionnel
